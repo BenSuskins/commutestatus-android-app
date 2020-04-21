@@ -1,6 +1,6 @@
 package uk.co.suskins.commutestatus.data
 
-class CommuteStatus(
+data class CommuteStatus(
     val scheduledTimeOfDeparture: String,
     val estimatedTimeOfDeparture: String,
     val platform: String,

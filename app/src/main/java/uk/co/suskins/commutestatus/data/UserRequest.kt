@@ -1,6 +1,6 @@
 package uk.co.suskins.commutestatus.data
 
-class UserRequest(
+data class UserRequest(
     val firstName: String,
     val lastName: String,
     val email: String,
