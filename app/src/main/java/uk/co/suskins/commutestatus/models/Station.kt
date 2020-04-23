@@ -1,4 +1,4 @@
-package uk.co.suskins.commutestatus.data
+package uk.co.suskins.commutestatus.models
 
 data class Station(
     val name: String,
