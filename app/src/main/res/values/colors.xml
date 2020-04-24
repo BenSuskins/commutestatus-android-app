@@ -3,4 +3,7 @@
     <color name="colorPrimary">#8700ff</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorOnTime">#7cb342</color>
+    <color name="colorDelayed">#fb8c00</color>
+    <color name="colorCancelled">#e53935</color>
 </resources>
