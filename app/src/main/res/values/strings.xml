@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">commutestatus</string>
+    <string name="platform">Platform %1$s</string>
+    <string name="status">%1$s</string>
+    <string name="std">%1$s to %2$s</string>
+    <string name="none">No trains to %1$s</string>
+    <string name="unknown">unknown</string>
 </resources>
