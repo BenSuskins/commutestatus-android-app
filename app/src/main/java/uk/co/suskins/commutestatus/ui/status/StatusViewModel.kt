@@ -1,4 +1,4 @@
-package uk.co.suskins.commutestatus.ui.commutestatus.status
+package uk.co.suskins.commutestatus.ui.status
 
 import androidx.lifecycle.ViewModel
 import uk.co.suskins.commutestatus.models.CommuteStatusService

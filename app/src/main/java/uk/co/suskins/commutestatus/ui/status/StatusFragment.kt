@@ -1,4 +1,4 @@
-package uk.co.suskins.commutestatus.ui.commutestatus.status
+package uk.co.suskins.commutestatus.ui.status
 
 import android.os.Bundle
 import android.view.LayoutInflater

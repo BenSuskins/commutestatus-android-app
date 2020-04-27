@@ -1,4 +1,4 @@
-package uk.co.suskins.commutestatus.ui.commutestatus.settings
+package uk.co.suskins.commutestatus.ui.settings
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
