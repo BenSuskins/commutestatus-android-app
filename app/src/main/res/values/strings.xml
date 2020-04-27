@@ -8,6 +8,9 @@
     <string name="updatePreferences">Update Preferences</string>
     <string name="reset">Reset</string>
     <string name="logOut">Log out</string>
+    <string name="logIn">Log in</string>
+    <string name="signUp">Sign up</string>
+    <string name="trainImgDescription">Train</string>
     <string name="email">Email Address:</string>
     <string name="homeStation">Home Station:</string>
     <string name="workStation">Work Station:</string>
