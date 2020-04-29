@@ -14,10 +14,10 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        initialiseView()
+        initialiseUi()
     }
 
-    private fun initialiseView() {
+    private fun initialiseUi() {
         val logoutButton = findViewById<Button>(R.id.logoutBtn)
         logoutButton.setOnClickListener { logout() }
 //        viewModel = ViewModelProviders.of(this).get(SettingsViewModel::class.java)

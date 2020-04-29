@@ -11,10 +11,10 @@ class StatusActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status)
-        initialiseView()
+        initialiseUi()
     }
 
-    private fun initialiseView() {
+    private fun initialiseUi() {
         //Obtain the token from the Intent's extras
         val accessToken = intent.getStringExtra(EXTRA_ID_TOKEN)
 
