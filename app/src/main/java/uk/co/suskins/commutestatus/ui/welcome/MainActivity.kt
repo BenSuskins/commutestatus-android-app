@@ -17,8 +17,10 @@ import com.auth0.android.result.Credentials
 import uk.co.suskins.commutestatus.R
 import uk.co.suskins.commutestatus.ui.status.StatusActivity
 
+const val EXTRA_ID_TOKEN: String = "com.auth0.ID_TOKEN"
+const val EXTRA_CLEAR_CREDENTIALS: String = "com.auth0.CLEAR_CREDENTIALS"
 
-class MainActivity(val EXTRA_ID_TOKEN: String = "com.auth0.ID_TOKEN", val EXTRA_CLEAR_CREDENTIALS: String = "com.auth0.CLEAR_CREDENTIALS") : AppCompatActivity() {
+public class MainActivity : AppCompatActivity() {
     private lateinit var auth0: Auth0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +91,9 @@ class MainActivity(val EXTRA_ID_TOKEN: String = "com.auth0.ID_TOKEN", val EXTRA_
 
     private fun showNextActivity() {
         val intent = Intent(this, StatusActivity::class.java)
-        startActivity(intent)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
         finish()
     }
 }
