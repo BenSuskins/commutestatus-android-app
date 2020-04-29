@@ -15,7 +15,7 @@ class StatusActivity : AppCompatActivity() {
         initialiseView()
     }
 
-    fun initialiseView() {
+    private fun initialiseView() {
         viewModel = ViewModelProviders.of(this).get(StatusViewModel::class.java)
         viewModel.getStatuses().observe(this, Observer { statuses ->
             //Todo update view according to view model
