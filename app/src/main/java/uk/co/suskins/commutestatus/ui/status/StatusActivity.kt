@@ -2,8 +2,6 @@ package uk.co.suskins.commutestatus.ui.status
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import uk.co.suskins.commutestatus.R
 
 class StatusActivity : AppCompatActivity() {
@@ -16,10 +14,10 @@ class StatusActivity : AppCompatActivity() {
     }
 
     private fun initialiseView() {
-        viewModel = ViewModelProviders.of(this).get(StatusViewModel::class.java)
-        viewModel.getStatuses().observe(this, Observer { statuses ->
-            //Todo update view according to view model
-//            toWorkPlatform.text = ""
-        })
+//        viewModel = ViewModelProviders.of(this).get(StatusViewModel::class.java)
+//        viewModel.getStatuses().observe(this, Observer { statuses ->
+//            //Todo update view according to view model
+//           toWorkPlatform.text = ""
+//        })
     }
 }
