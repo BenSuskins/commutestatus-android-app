@@ -1,7 +1,8 @@
-package uk.co.suskins.commutestatus.models
+package uk.co.suskins.commutestatus.service
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import uk.co.suskins.commutestatus.models.CommuteStatus
 
 class CommuteStatusService {
     private val statusList = mutableListOf<CommuteStatus>()
