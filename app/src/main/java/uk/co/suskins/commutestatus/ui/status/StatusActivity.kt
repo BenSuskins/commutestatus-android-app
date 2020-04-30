@@ -1,16 +1,20 @@
 package uk.co.suskins.commutestatus.ui.status
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_status.*
 import uk.co.suskins.commutestatus.R
-import uk.co.suskins.commutestatus.models.Status
+import uk.co.suskins.commutestatus.data.CommuteStatus
+import uk.co.suskins.commutestatus.data.Status
 import uk.co.suskins.commutestatus.ui.welcome.EXTRA_ID_TOKEN
 
 class StatusActivity : AppCompatActivity() {
-    private lateinit var viewModel: StatusViewModel
+    private val viewModel: StatusViewModel by viewModels()
     private var workIndex = 0
     private var homeIndex = 0
 
@@ -24,11 +28,36 @@ class StatusActivity : AppCompatActivity() {
         //Obtain the token from the Intent's extras
         val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
 
-        viewModel = ViewModelProviders.of(this).get(StatusViewModel::class.java)
-        viewModel.getStatuses().observe(this, Observer { statuses ->
 
+        //Create an observer for is loading
+        val loadingObserver = Observer<Boolean> { isLoading ->
+            if (isLoading) {
+                //Show spinny wheel
+                loadingBar.isVisible = true
+                toHomePlatform.isVisible = false
+                toHomeSTD.isVisible = false
+                toHomeStatus.isVisible = false
+                toWorkPlatform.isVisible = false
+                toWorkSTD.isVisible = false
+                toWorkStatus.isVisible = false
+            } else {
+                //Dont show  spinny wheel
+                loadingBar.isVisible = false
+                toHomePlatform.isVisible = true
+                toHomeSTD.isVisible = true
+                toHomeStatus.isVisible = true
+                toWorkPlatform.isVisible = true
+                toWorkSTD.isVisible = true
+                toWorkStatus.isVisible = true
+            }
+
+        }
+        viewModel.isLoading().observe(this, loadingObserver)
+
+        //Create an observer for the commute status
+        val commuteStatusObserver = Observer<CommuteStatus> { statuses ->
             //Set to work
-            val toWork = statuses[0].toWork.elementAt(workIndex)
+            val toWork = statuses.toWork.elementAt(workIndex)
             toWorkSTD.text = getString(
                 R.string.std,
                 toWork.scheduledTimeOfDeparture,
@@ -45,7 +74,7 @@ class StatusActivity : AppCompatActivity() {
             )
 
             //Set to home
-            val toHome = statuses[0].toHome.elementAt(homeIndex)
+            val toHome = statuses.toHome.elementAt(homeIndex)
             toHomeSTD.text = getString(
                 R.string.std,
                 toHome.scheduledTimeOfDeparture,
@@ -62,9 +91,12 @@ class StatusActivity : AppCompatActivity() {
             )
 
             setStatusColours(toWork, toHome)
-        })
+        }
+        viewModel.getCommuteStatus(idToken).observe(this, commuteStatusObserver)
+
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun setStatusColours(toWork: Status, toHome: Status) {
         when {
             toWork.estimatedTimeOfDeparture.equals("on time", true) -> {
@@ -91,14 +123,14 @@ class StatusActivity : AppCompatActivity() {
         }
     }
 
-    fun activityClickAction() {
+    fun activityClickAction(view: View) {
         homeIndex++
-        if (homeIndex >= viewModel.getNumberOfHomeStatuses()) {
+        if (homeIndex >= viewModel.getNumberOfHomeStatuses()!!) {
             homeIndex = 0
         }
 
         workIndex++
-        if (workIndex >= viewModel.getNumberOfWorkStatuses()) {
+        if (workIndex >= viewModel.getNumberOfWorkStatuses()!!) {
             workIndex = 0
         }
     }
