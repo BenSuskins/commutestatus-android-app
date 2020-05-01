@@ -1,10 +1,10 @@
 package uk.co.suskins.commutestatus.ui.status
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_status.*
@@ -13,10 +13,15 @@ import uk.co.suskins.commutestatus.data.CommuteStatus
 import uk.co.suskins.commutestatus.data.Status
 import uk.co.suskins.commutestatus.ui.welcome.EXTRA_ID_TOKEN
 
+const val ON_TIME = "On time"
+const val LOADING = "loading"
+const val ERRORED = "errored"
+
 class StatusActivity : AppCompatActivity() {
     private val viewModel: StatusViewModel by viewModels()
     private var workIndex = 0
     private var homeIndex = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +44,18 @@ class StatusActivity : AppCompatActivity() {
 
         //Create an observer for is loading
         val statusObserver = Observer<String> { status ->
-            if (status.equals("loading")) {
+            if (status.equals(LOADING)) {
                 //Show spinny wheel
                 loadingBar.isVisible = true
+                toHomePlatform.isVisible = false
+                toHomeSTD.isVisible = false
+                toHomeStatus.isVisible = false
+                toWorkPlatform.isVisible = false
+                toWorkSTD.isVisible = false
+                toWorkStatus.isVisible = false
+            } else if (status.equals(ERRORED)) {
+                //Show spinny wheel
+                loadingBar.isVisible = false
                 toHomePlatform.isVisible = false
                 toHomeSTD.isVisible = false
                 toHomeStatus.isVisible = false
@@ -104,29 +118,58 @@ class StatusActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("ResourceAsColor")
     private fun setStatusColours(toWork: Status, toHome: Status) {
         when {
-            toWork.estimatedTimeOfDeparture.equals("on time", true) -> {
-                toWorkStatus.setTextColor(R.color.colorOnTime)
+            toWork.estimatedTimeOfDeparture.equals(ON_TIME, true) -> {
+                toWorkStatus.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.colorOnTime
+                    )
+                )
             }
             toWork.isCancelled -> {
-                toWorkStatus.setTextColor(R.color.colorCancelled)
+                toWorkStatus.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.colorCancelled
+                    )
+                )
             }
             else -> {
-                toWorkStatus.setTextColor(R.color.colorDelayed)
+                toWorkStatus.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.colorDelayed
+                    )
+                )
             }
         }
 
         when {
-            toHome.estimatedTimeOfDeparture.equals("on time", true) -> {
-                toHomeStatus.setTextColor(R.color.colorOnTime)
+            toHome.estimatedTimeOfDeparture.equals(ON_TIME, true) -> {
+                toHomeStatus.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.colorOnTime
+                    )
+                )
             }
             toHome.isCancelled -> {
-                toHomeStatus.setTextColor(R.color.colorCancelled)
+                toHomeStatus.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.colorCancelled
+                    )
+                )
             }
             else -> {
-                toHomeStatus.setTextColor(R.color.colorDelayed)
+                toHomeStatus.setTextColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.colorDelayed
+                    )
+                )
             }
         }
     }

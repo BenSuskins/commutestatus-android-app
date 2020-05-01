@@ -2,24 +2,53 @@ package uk.co.suskins.commutestatus.ui.status
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import uk.co.suskins.commutestatus.data.CommuteStatus
+import uk.co.suskins.commutestatus.service.CommuteStatusService
+
 
 class StatusViewModel : ViewModel() {
     val status: MutableLiveData<String> by lazy {
-        MutableLiveData<String>("loading")
+        MutableLiveData<String>(LOADING)
     }
 
     internal val commuteStatus: MutableLiveData<CommuteStatus> by lazy {
         MutableLiveData<CommuteStatus>()
     }
 
-    fun getCommuteStatus(idToken: String?): MutableLiveData<CommuteStatus> {
-        status.value = "loading"
-        //Todo call api
+    fun getCommuteStatus(accessToken: String?): MutableLiveData<CommuteStatus> {
+        status.value = LOADING
 
-        //Todo update live data with response
-//        commuteStatus.value = apiResponse
-        status.value = ""
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://commutestatusapi.suskins.co.uk/api/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service: CommuteStatusService = retrofit.create(CommuteStatusService::class.java)
+        service.getCommuteStatus("Bearer " + accessToken).enqueue(
+            (object : Callback<CommuteStatus> {
+                override fun onFailure(call: Call<CommuteStatus>, t: Throwable) {
+                    status.value = ERRORED
+                }
+
+                override fun onResponse(
+                    call: Call<CommuteStatus>,
+                    response: Response<CommuteStatus>
+                ) {
+                    if (response.isSuccessful) {
+                        commuteStatus.value = response.body()
+                        status.value = ""
+                    } else {
+                        status.value = ERRORED
+                    }
+                }
+            })
+        )
+
         return commuteStatus
     }
 
