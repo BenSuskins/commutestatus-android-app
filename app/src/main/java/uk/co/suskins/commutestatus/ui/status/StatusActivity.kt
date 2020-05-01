@@ -28,10 +28,18 @@ class StatusActivity : AppCompatActivity() {
         //Obtain the token from the Intent's extras
         val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
 
+        //Initially set screen to show loading
+        loadingBar.isVisible = true
+        toHomePlatform.isVisible = false
+        toHomeSTD.isVisible = false
+        toHomeStatus.isVisible = false
+        toWorkPlatform.isVisible = false
+        toWorkSTD.isVisible = false
+        toWorkStatus.isVisible = false
 
         //Create an observer for is loading
-        val loadingObserver = Observer<Boolean> { isLoading ->
-            if (isLoading) {
+        val statusObserver = Observer<String> { status ->
+            if (status.equals("loading")) {
                 //Show spinny wheel
                 loadingBar.isVisible = true
                 toHomePlatform.isVisible = false
@@ -52,7 +60,7 @@ class StatusActivity : AppCompatActivity() {
             }
 
         }
-        viewModel.isLoading().observe(this, loadingObserver)
+        viewModel.status.observe(this, statusObserver)
 
         //Create an observer for the commute status
         val commuteStatusObserver = Observer<CommuteStatus> { statuses ->

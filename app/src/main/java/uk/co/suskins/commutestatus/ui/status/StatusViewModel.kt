@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import uk.co.suskins.commutestatus.data.CommuteStatus
 
 class StatusViewModel : ViewModel() {
-    private val status: MutableLiveData<String> by lazy {
+    val status: MutableLiveData<String> by lazy {
         MutableLiveData<String>("loading")
     }
 
@@ -18,24 +18,12 @@ class StatusViewModel : ViewModel() {
         //Todo call api
 
         //Todo update live data with response
-//        status.value = ""
+//        commuteStatus.value = apiResponse
+        status.value = ""
         return commuteStatus
     }
 
     fun getNumberOfWorkStatuses() = commuteStatus.value?.toWork?.size
 
     fun getNumberOfHomeStatuses() = commuteStatus.value?.toHome?.size
-
-    fun isLoading(): MutableLiveData<Boolean> {
-        val isLoading: MutableLiveData<Boolean> by lazy {
-            MutableLiveData<Boolean>()
-        }
-
-        if (status.value?.equals("loading")!!)
-            isLoading.value = true
-        else
-            isLoading.value = false
-
-        return isLoading
-    }
 }
