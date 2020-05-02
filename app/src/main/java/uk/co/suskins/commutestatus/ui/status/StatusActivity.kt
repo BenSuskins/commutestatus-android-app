@@ -53,6 +53,7 @@ class StatusActivity : AppCompatActivity() {
                 toWorkPlatform.isVisible = false
                 toWorkSTD.isVisible = false
                 toWorkStatus.isVisible = false
+                errorMessage.isVisible = false
             } else if (status.equals(ERRORED)) {
                 //Show spinny wheel
                 loadingBar.isVisible = false
@@ -62,6 +63,7 @@ class StatusActivity : AppCompatActivity() {
                 toWorkPlatform.isVisible = false
                 toWorkSTD.isVisible = false
                 toWorkStatus.isVisible = false
+                errorMessage.isVisible = true
             } else {
                 //Dont show  spinny wheel
                 loadingBar.isVisible = false
@@ -71,6 +73,7 @@ class StatusActivity : AppCompatActivity() {
                 toWorkPlatform.isVisible = true
                 toWorkSTD.isVisible = true
                 toWorkStatus.isVisible = true
+                errorMessage.isVisible = false
             }
 
         }

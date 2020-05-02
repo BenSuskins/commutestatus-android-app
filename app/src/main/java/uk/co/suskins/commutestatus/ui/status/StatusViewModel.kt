@@ -52,7 +52,19 @@ class StatusViewModel : ViewModel() {
         return commuteStatus
     }
 
-    fun getNumberOfWorkStatuses() = commuteStatus.value?.toWork?.size
+    fun getNumberOfWorkStatuses(): Int? {
+        if (commuteStatus.value == null) {
+            return 0
+        } else {
+            return commuteStatus.value?.toWork?.size
+        }
+    }
 
-    fun getNumberOfHomeStatuses() = commuteStatus.value?.toHome?.size
+    fun getNumberOfHomeStatuses(): Int? {
+        if (commuteStatus.value == null) {
+            return 0
+        } else {
+            return commuteStatus.value?.toHome?.size
+        }
+    }
 }
