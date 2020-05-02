@@ -4,7 +4,6 @@
     <string name="status">%1$s</string>
     <string name="std">%1$s to %2$s</string>
     <string name="none">No trains to %1$s</string>
-    <string name="unknown">unknown</string>
     <string name="updatePreferences">Update Preferences</string>
     <string name="reset">Reset</string>
     <string name="logOut">Log out</string>

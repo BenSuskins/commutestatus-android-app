@@ -19,7 +19,6 @@ const val ERRORED = "errored"
 
 class StatusActivity : AppCompatActivity() {
     private val viewModel: StatusViewModel by viewModels()
-    val UNKNOWN_PLATFORM = getString(R.string.unkownPlatform)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +29,7 @@ class StatusActivity : AppCompatActivity() {
     private fun initialiseUi() {
         //Obtain the token from the Intent's extras
         val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
-
+        val UNKNOWN_PLATFORM = getString(R.string.unkownPlatform)
         //Initially set screen to show loading
         loadingBar.isVisible = true
         toHomePlatform.isVisible = false
