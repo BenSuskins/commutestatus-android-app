@@ -176,6 +176,6 @@ class StatusActivity : AppCompatActivity() {
     }
 
     fun activityClickAction(view: View) {
-
+        viewModel.incrementIndex()
     }
 }
