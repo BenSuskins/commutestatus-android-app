@@ -19,9 +19,7 @@ const val ERRORED = "errored"
 
 class StatusActivity : AppCompatActivity() {
     private val viewModel: StatusViewModel by viewModels()
-    private var workIndex = 0
-    private var homeIndex = 0
-
+    val UNKNOWN_PLATFORM = getString(R.string.unkownPlatform)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +80,7 @@ class StatusActivity : AppCompatActivity() {
         //Create an observer for the commute status
         val commuteStatusObserver = Observer<CommuteStatus> { statuses ->
             //Set to work
-            val toWork = statuses.toWork.elementAt(workIndex)
+            val toWork = statuses.toWork.elementAt(viewModel.workIndex)
             toWorkSTD.text = getString(
                 R.string.std,
                 toWork.scheduledTimeOfDeparture,
@@ -94,12 +92,12 @@ class StatusActivity : AppCompatActivity() {
                 R.string.platform, if (toWork.platform != "") {
                     toWork.platform
                 } else {
-                    "Unknown"
+                    UNKNOWN_PLATFORM
                 }
             )
 
             //Set to home
-            val toHome = statuses.toHome.elementAt(homeIndex)
+            val toHome = statuses.toHome.elementAt(viewModel.homeIndex)
             toHomeSTD.text = getString(
                 R.string.std,
                 toHome.scheduledTimeOfDeparture,
@@ -111,7 +109,7 @@ class StatusActivity : AppCompatActivity() {
                 R.string.platform, if (toHome.platform != "") {
                     toHome.platform
                 } else {
-                    "Unknown"
+                    UNKNOWN_PLATFORM
                 }
             )
 
@@ -178,14 +176,6 @@ class StatusActivity : AppCompatActivity() {
     }
 
     fun activityClickAction(view: View) {
-        homeIndex++
-        if (homeIndex >= viewModel.getNumberOfHomeStatuses()!!) {
-            homeIndex = 0
-        }
 
-        workIndex++
-        if (workIndex >= viewModel.getNumberOfWorkStatuses()!!) {
-            workIndex = 0
-        }
     }
 }

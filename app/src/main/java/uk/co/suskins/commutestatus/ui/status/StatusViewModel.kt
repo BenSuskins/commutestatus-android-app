@@ -12,6 +12,8 @@ import uk.co.suskins.commutestatus.service.CommuteStatusService
 
 
 class StatusViewModel : ViewModel() {
+    var workIndex = 0
+    var homeIndex = 0
     val status: MutableLiveData<String> by lazy {
         MutableLiveData<String>(LOADING)
     }
@@ -65,6 +67,18 @@ class StatusViewModel : ViewModel() {
             return 0
         } else {
             return commuteStatus.value?.toHome?.size
+        }
+    }
+
+    fun incrementIndex(){
+        homeIndex++
+        if (homeIndex >= getNumberOfHomeStatuses()!!) {
+            homeIndex = 0
+        }
+
+        workIndex++
+        if (workIndex >= getNumberOfWorkStatuses()!!) {
+            workIndex = 0
         }
     }
 }
