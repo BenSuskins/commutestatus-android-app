@@ -1,6 +1,7 @@
 package uk.co.suskins.commutestatus.ui.status
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_status.*
 import uk.co.suskins.commutestatus.R
-import uk.co.suskins.commutestatus.data.CommuteStatus
 import uk.co.suskins.commutestatus.data.Status
 import uk.co.suskins.commutestatus.ui.welcome.EXTRA_ID_TOKEN
 
@@ -18,17 +18,17 @@ const val LOADING = "loading"
 const val ERRORED = "errored"
 
 class StatusActivity : AppCompatActivity() {
+    private val TAG = "StatusActivity"
     private val viewModel: StatusViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status)
+        refresh()
         initialiseUi()
     }
 
     private fun initialiseUi() {
-        //Obtain the token from the Intent's extras
-        val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
         val UNKNOWN_PLATFORM = getString(R.string.unkownPlatform)
         //Initially set screen to show loading
         loadingBar.isVisible = true
@@ -38,10 +38,12 @@ class StatusActivity : AppCompatActivity() {
         toWorkPlatform.isVisible = false
         toWorkSTD.isVisible = false
         toWorkStatus.isVisible = false
+        errorMessage.isVisible = false
 
         //Create an observer for is loading
         val statusObserver = Observer<String> { status ->
             if (status.equals(LOADING)) {
+                Log.i(TAG, "Loading")
                 //Show spinny wheel
                 loadingBar.isVisible = true
                 toHomePlatform.isVisible = false
@@ -52,6 +54,7 @@ class StatusActivity : AppCompatActivity() {
                 toWorkStatus.isVisible = false
                 errorMessage.isVisible = false
             } else if (status.equals(ERRORED)) {
+                Log.i(TAG, "Errored")
                 //Show spinny wheel
                 loadingBar.isVisible = false
                 toHomePlatform.isVisible = false
@@ -62,6 +65,7 @@ class StatusActivity : AppCompatActivity() {
                 toWorkStatus.isVisible = false
                 errorMessage.isVisible = true
             } else {
+                Log.i(TAG, "Finished Loading")
                 //Dont show  spinny wheel
                 loadingBar.isVisible = false
                 toHomePlatform.isVisible = true
@@ -77,99 +81,120 @@ class StatusActivity : AppCompatActivity() {
         viewModel.status.observe(this, statusObserver)
 
         //Create an observer for the commute status
-        val commuteStatusObserver = Observer<CommuteStatus> { statuses ->
-            //Set to work
-            val toWork = statuses.toWork.elementAt(viewModel.workIndex)
-            toWorkSTD.text = getString(
-                R.string.std,
-                toWork.scheduledTimeOfDeparture,
-                toWork.to
-            ) //todo handle no trains
-            toWorkStatus.text =
-                getString(R.string.status, toWork.estimatedTimeOfDeparture)
-            toWorkPlatform.text = getString(
-                R.string.platform, if (toWork.platform != "") {
-                    toWork.platform
-                } else {
-                    UNKNOWN_PLATFORM
-                }
-            )
+        val toHomeObserver = Observer<Status> { toHome ->
+            if (toHome != null) {
+                //Set to home
+                toHomeSTD.text = getString(
+                    R.string.std,
+                    toHome.scheduledTimeOfDeparture,
+                    toHome.to
+                ) //todo handle no trains
+                toHomeStatus.text =
+                    getString(R.string.status, toHome.estimatedTimeOfDeparture)
+                toHomePlatform.text = getString(
+                    R.string.platform, if (toHome.platform != "") {
+                        toHome.platform
+                    } else {
+                        UNKNOWN_PLATFORM
+                    }
+                )
 
-            //Set to home
-            val toHome = statuses.toHome.elementAt(viewModel.homeIndex)
-            toHomeSTD.text = getString(
-                R.string.std,
-                toHome.scheduledTimeOfDeparture,
-                toHome.to
-            ) //todo handle no trains
-            toHomeStatus.text =
-                getString(R.string.status, toHome.estimatedTimeOfDeparture)
-            toHomePlatform.text = getString(
-                R.string.platform, if (toHome.platform != "") {
-                    toHome.platform
-                } else {
-                    UNKNOWN_PLATFORM
-                }
-            )
-
-            setStatusColours(toWork, toHome)
+                setStatusColours()
+            }
         }
-        viewModel.getCommuteStatus(idToken).observe(this, commuteStatusObserver)
 
+        val toWorkObserver = Observer<Status> { toWork ->
+            if (toWork != null) {
+                //Set to work
+                toWorkSTD.text = getString(
+                    R.string.std,
+                    toWork.scheduledTimeOfDeparture,
+                    toWork.to
+                ) //todo handle no trains
+                toWorkStatus.text =
+                    getString(R.string.status, toWork.estimatedTimeOfDeparture)
+                toWorkPlatform.text = getString(
+                    R.string.platform, if (toWork.platform != "") {
+                        toWork.platform
+                    } else {
+                        UNKNOWN_PLATFORM
+                    }
+                )
+                setStatusColours()
+            }
+        }
+
+        viewModel.getToWorkStatus().observe(this, toWorkObserver)
+        viewModel.getToHomeStatus().observe(this, toHomeObserver)
     }
 
-    private fun setStatusColours(toWork: Status, toHome: Status) {
-        when {
-            toWork.estimatedTimeOfDeparture.equals(ON_TIME, true) -> {
-                toWorkStatus.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.colorOnTime
+    fun refresh() {
+        val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
+        viewModel.getCommuteStatus(idToken)
+    }
+
+    private fun setStatusColours() {
+        if (viewModel.getToWorkStatus().value != null) {
+            when {
+                viewModel.getToWorkStatus().value?.estimatedTimeOfDeparture.equals(
+                    ON_TIME,
+                    true
+                ) -> {
+                    toWorkStatus.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.colorOnTime
+                        )
                     )
-                )
-            }
-            toWork.isCancelled -> {
-                toWorkStatus.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.colorCancelled
+                }
+                viewModel.getToWorkStatus().value?.isCancelled!! -> {
+                    toWorkStatus.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.colorCancelled
+                        )
                     )
-                )
-            }
-            else -> {
-                toWorkStatus.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.colorDelayed
+                }
+                else -> {
+                    toWorkStatus.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.colorDelayed
+                        )
                     )
-                )
+                }
             }
         }
 
-        when {
-            toHome.estimatedTimeOfDeparture.equals(ON_TIME, true) -> {
-                toHomeStatus.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.colorOnTime
+        if (viewModel.getToHomeStatus().value != null) {
+            when {
+                viewModel.getToHomeStatus().value?.estimatedTimeOfDeparture.equals(
+                    ON_TIME,
+                    true
+                ) -> {
+                    toHomeStatus.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.colorOnTime
+                        )
                     )
-                )
-            }
-            toHome.isCancelled -> {
-                toHomeStatus.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.colorCancelled
+                }
+                viewModel.getToHomeStatus().value?.isCancelled!! -> {
+                    toHomeStatus.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.colorCancelled
+                        )
                     )
-                )
-            }
-            else -> {
-                toHomeStatus.setTextColor(
-                    ContextCompat.getColor(
-                        applicationContext,
-                        R.color.colorDelayed
+                }
+                else -> {
+                    toHomeStatus.setTextColor(
+                        ContextCompat.getColor(
+                            applicationContext,
+                            R.color.colorDelayed
+                        )
                     )
-                )
+                }
             }
         }
     }
