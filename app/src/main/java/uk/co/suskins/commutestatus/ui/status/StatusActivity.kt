@@ -2,6 +2,9 @@ package uk.co.suskins.commutestatus.ui.status
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +29,27 @@ class StatusActivity : AppCompatActivity() {
         setContentView(R.layout.activity_status)
         refresh()
         initialiseUi()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.refresh -> {
+                refresh()
+                true
+            }
+            R.id.settings -> {
+                //todo
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initialiseUi() {
