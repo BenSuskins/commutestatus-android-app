@@ -31,6 +31,7 @@ class StatusViewModel : ViewModel() {
     }
 
     fun getCommuteStatus(accessToken: String?) {
+        //Initialise values
         status.value = LOADING
         workIndex = 0
         homeIndex = 0
@@ -40,6 +41,7 @@ class StatusViewModel : ViewModel() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        //Call API with Access Token
         val service: CommuteStatusService = retrofit.create(CommuteStatusService::class.java)
         service.getCommuteStatus("Bearer " + accessToken).enqueue(
             (object : Callback<CommuteStatus> {
@@ -54,11 +56,13 @@ class StatusViewModel : ViewModel() {
                     response: Response<CommuteStatus>
                 ) {
                     if (response.isSuccessful) {
+                        //If successful update values
                         commuteStatus.value = response.body()
                         toWork.postValue(commuteStatus.value?.toWork?.elementAt(workIndex)!!)
                         toHome.postValue(commuteStatus.value?.toHome?.elementAt(homeIndex)!!)
                         status.postValue("")
                     } else {
+                        //If errored set state and log
                         status.value = ERRORED
                         Log.e(TAG, "Error getting Commute Status")
                         Log.e(TAG, "Code: ${response.code()}")

@@ -55,7 +55,7 @@ class StatusActivity : AppCompatActivity() {
                 errorMessage.isVisible = false
             } else if (status.equals(ERRORED)) {
                 Log.i(TAG, "Errored")
-                //Show spinny wheel
+                //Show error message
                 loadingBar.isVisible = false
                 toHomePlatform.isVisible = false
                 toHomeSTD.isVisible = false
@@ -129,6 +129,7 @@ class StatusActivity : AppCompatActivity() {
     }
 
     fun refresh() {
+        //Refresh Commute Status from API
         val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
         viewModel.getCommuteStatus(idToken)
     }
@@ -200,6 +201,7 @@ class StatusActivity : AppCompatActivity() {
     }
 
     fun activityClickAction(view: View) {
+        //If screen clicked, update to next train
         viewModel.incrementIndex()
     }
 }
