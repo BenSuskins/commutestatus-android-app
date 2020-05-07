@@ -24,6 +24,7 @@ const val ERRORED = "errored"
 
 class StatusActivity : AppCompatActivity() {
     private val TAG = "StatusActivity"
+    var idToken: String? = ""
     private val viewModel: StatusViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +32,12 @@ class StatusActivity : AppCompatActivity() {
         setContentView(R.layout.activity_status)
         refresh()
         initialiseUi()
+    }
+
+    fun refresh() {
+        //Refresh Commute Status from API
+        idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
+        viewModel.getCommuteStatus(idToken)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,6 +64,7 @@ class StatusActivity : AppCompatActivity() {
     private fun showSettingsActivity() {
         // Move to the settings activity
         val intent = Intent(applicationContext, SettingsActivity::class.java)
+        intent.putExtra(EXTRA_ID_TOKEN, idToken)
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         }
@@ -160,12 +168,6 @@ class StatusActivity : AppCompatActivity() {
 
         viewModel.getToWorkStatus().observe(this, toWorkObserver)
         viewModel.getToHomeStatus().observe(this, toHomeObserver)
-    }
-
-    fun refresh() {
-        //Refresh Commute Status from API
-        val idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
-        viewModel.getCommuteStatus(idToken)
     }
 
     private fun setStatusColours() {
