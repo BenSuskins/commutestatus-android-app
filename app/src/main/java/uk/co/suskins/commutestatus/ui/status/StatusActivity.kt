@@ -1,5 +1,6 @@
 package uk.co.suskins.commutestatus.ui.status
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -14,6 +15,7 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_status.*
 import uk.co.suskins.commutestatus.R
 import uk.co.suskins.commutestatus.data.Status
+import uk.co.suskins.commutestatus.ui.settings.SettingsActivity
 import uk.co.suskins.commutestatus.ui.welcome.EXTRA_ID_TOKEN
 
 const val ON_TIME = "On time"
@@ -45,10 +47,18 @@ class StatusActivity : AppCompatActivity() {
                 true
             }
             R.id.settings -> {
-                //todo
+                showSettingsActivity()
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSettingsActivity() {
+        // Move to the settings activity
+        val intent = Intent(applicationContext, SettingsActivity::class.java)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
         }
     }
 
