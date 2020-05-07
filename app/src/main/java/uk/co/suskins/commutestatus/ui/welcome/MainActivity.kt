@@ -45,10 +45,9 @@ class MainActivity : AppCompatActivity() {
         //Check if the activity was launched to log the user out
         if (intent.getBooleanExtra(EXTRA_CLEAR_CREDENTIALS, false)) {
             doLogout()
-        }
-        if (credentialsManager.hasValidCredentials()) {
+        } else if (credentialsManager.hasValidCredentials()) {
             // Obtain the existing credentials and move to the next activity
-            showNextActivity()
+            showStatusActivity()
         }
 
         initialiseUi()
@@ -81,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onSuccess(@NonNull credentials: Credentials) {
                     credentialsManager.saveCredentials(credentials)
-                    showNextActivity()
+                    showStatusActivity()
                 }
             })
     }
@@ -93,17 +92,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val logoutCallback: VoidCallback = object : VoidCallback {
-        override fun onSuccess(payload: Void) {
+        override fun onSuccess(payload: Void?) {
             credentialsManager.clearCredentials()
         }
 
-        override fun onFailure(error: Auth0Exception) {
+        override fun onFailure(error: Auth0Exception?) {
             // Log out canceled, keep the user logged in
-            showNextActivity()
+            showStatusActivity()
         }
     }
 
-    private fun showNextActivity() {
+    private fun showStatusActivity() {
         credentialsManager.getCredentials(object :
             BaseCallback<Credentials, CredentialsManagerException?> {
             override fun onSuccess(credentials: Credentials) {

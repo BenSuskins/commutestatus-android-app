@@ -11,6 +11,7 @@
     <string name="signUp">Sign up</string>
     <string name="refresh">Refresh</string>
     <string name="settings">Settings</string>
+    <string name="settingsHeader">Here you can update your preferences.</string>
     <string name="trainImgDescription">Train</string>
     <string name="email">Email Address:</string>
     <string name="homeStation">Home Station:</string>
