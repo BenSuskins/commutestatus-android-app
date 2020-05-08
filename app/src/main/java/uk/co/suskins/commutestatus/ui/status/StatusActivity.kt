@@ -23,9 +23,13 @@ const val LOADING = "loading"
 const val ERRORED = "errored"
 
 class StatusActivity : AppCompatActivity() {
-    private val TAG = "StatusActivity"
     var idToken: String? = ""
     private val viewModel: StatusViewModel by viewModels()
+
+    override fun onResume() {
+        super.onResume()
+        refresh()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +51,6 @@ class StatusActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         return when (item.itemId) {
             R.id.refresh -> {
                 refresh()
@@ -85,7 +88,6 @@ class StatusActivity : AppCompatActivity() {
         //Create an observer for is loading
         val statusObserver = Observer<String> { status ->
             if (status.equals(LOADING)) {
-                Log.i(TAG, "Loading")
                 //Show spinny wheel
                 loadingBar.isVisible = true
                 toHomePlatform.isVisible = false
@@ -96,7 +98,6 @@ class StatusActivity : AppCompatActivity() {
                 toWorkStatus.isVisible = false
                 errorMessage.isVisible = false
             } else if (status.equals(ERRORED)) {
-                Log.i(TAG, "Errored")
                 //Show error message
                 loadingBar.isVisible = false
                 toHomePlatform.isVisible = false
@@ -107,7 +108,6 @@ class StatusActivity : AppCompatActivity() {
                 toWorkStatus.isVisible = false
                 errorMessage.isVisible = true
             } else {
-                Log.i(TAG, "Finished Loading")
                 //Dont show  spinny wheel
                 loadingBar.isVisible = false
                 toHomePlatform.isVisible = true

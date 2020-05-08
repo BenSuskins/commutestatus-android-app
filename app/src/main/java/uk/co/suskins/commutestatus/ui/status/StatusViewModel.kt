@@ -43,7 +43,7 @@ class StatusViewModel : ViewModel() {
 
         //Call API with Access Token
         val service: CommuteStatusService = retrofit.create(CommuteStatusService::class.java)
-        service.getCommuteStatus("Bearer " + accessToken).enqueue(
+        service.getCommuteStatus("Bearer $accessToken").enqueue(
             (object : Callback<CommuteStatus> {
                 override fun onFailure(call: Call<CommuteStatus>, t: Throwable) {
                     status.value = ERRORED
