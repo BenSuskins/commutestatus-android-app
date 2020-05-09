@@ -3,6 +3,7 @@ package uk.co.suskins.commutestatus.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.widget.ArrayAdapter
 import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -87,6 +88,37 @@ class SettingsActivity : AppCompatActivity() {
 
         }
         viewModel.userStatus.observe(this, userStatusObserver)
+
+        val stationStatusObserver = Observer<String> { status ->
+            if (status.equals(LOADING)) {
+                //Do nothing if loading
+            } else if (status.equals(ERRORED)) {
+                //Show error message
+                loadingBar.isVisible = false
+                errorMessage.isVisible = true
+                emailInput.isVisible = false
+                emailText.isVisible = false
+                homeStationInput.isVisible = false
+                homeStationText.isVisible = false
+                workStationInput.isVisible = false
+                workStationText.isVisible = false
+            } else {
+                //Set AutoCompleteText Views
+                val stations: ArrayAdapter<String> =
+                    ArrayAdapter<String>(
+                        this,
+                        R.layout.list_item,
+                        R.id.itemText,
+                        viewModel.stations.value!!.stations.map { station -> station.name })
+
+                homeStationInput.threshold = 2
+                homeStationInput.setAdapter(stations)
+
+                workStationInput.threshold = 2
+                workStationInput.setAdapter(stations)
+            }
+        }
+        viewModel.stationStatus.observe(this, stationStatusObserver)
     }
 
     private fun updatePreferences() {
@@ -105,7 +137,11 @@ class SettingsActivity : AppCompatActivity() {
      * Finds station ID from Station Name
      */
     private fun getStationId(stationToFind: String): Int {
-        return viewModel.stations.value!!.stations.filter { station -> station.name.equals(stationToFind) }[0].id
+        return viewModel.stations.value!!.stations.filter { station ->
+            station.name.equals(
+                stationToFind
+            )
+        }[0].id
     }
 
     private fun reset() {
