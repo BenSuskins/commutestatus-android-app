@@ -79,7 +79,7 @@ class StatusViewModel : ViewModel() {
                             toHome.postValue(null)
                         }
                         if (!commuteStatus.value!!.toWork.isEmpty()) {
-                            toHome.postValue(commuteStatus.value?.toWork?.elementAt(workIndex))
+                            toWork.postValue(commuteStatus.value?.toWork?.elementAt(workIndex))
                         } else {
                             toWork.postValue(null)
                         }
