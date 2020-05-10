@@ -109,13 +109,8 @@ class StatusActivity : AppCompatActivity() {
             } else {
                 //Dont show loading bar
                 loadingBar.isVisible = false
-                toHomePlatform.isVisible = true
                 toHomeSTD.isVisible = true
-                toHomeStatus.isVisible = true
-                toWorkPlatform.isVisible = true
                 toWorkSTD.isVisible = true
-                toWorkStatus.isVisible = true
-                errorMessage.isVisible = false
             }
 
         }
@@ -123,7 +118,15 @@ class StatusActivity : AppCompatActivity() {
 
         //Create an observer for the commute status
         val toHomeObserver = Observer<Status> { toHome ->
-            if (toHome != null) {
+            if (viewModel.getNumberOfHomeStatuses() == 0) {
+                //Intially set to no trains
+                toHomeSTD.text = getString(
+                    R.string.none,
+                    viewModel.user.value!!.homeStation
+                )
+                toHomeStatus.isVisible = false
+                toHomePlatform.isVisible = false
+            } else if (toHome != null) {
                 //Set to home
                 toHomeSTD.text = getString(
                     R.string.std,
@@ -140,12 +143,22 @@ class StatusActivity : AppCompatActivity() {
                     }
                 )
 
+                toHomeStatus.isVisible = true
+                toHomePlatform.isVisible = true
                 setStatusColours()
             }
         }
 
         val toWorkObserver = Observer<Status> { toWork ->
-            if (toWork != null) {
+            if (viewModel.getNumberOfWorkStatuses() == 0) {
+                //Intially set to no trains
+                toWorkSTD.text = getString(
+                    R.string.none,
+                    viewModel.user.value!!.workStation
+                )
+                toWorkStatus.isVisible = false
+                toWorkPlatform.isVisible = false
+            } else if (toWork != null) {
                 //Set to work
                 toWorkSTD.text = getString(
                     R.string.std,
@@ -161,6 +174,9 @@ class StatusActivity : AppCompatActivity() {
                         UNKNOWN_PLATFORM
                     }
                 )
+
+                toWorkStatus.isVisible = true
+                toWorkPlatform.isVisible = true
                 setStatusColours()
             }
         }

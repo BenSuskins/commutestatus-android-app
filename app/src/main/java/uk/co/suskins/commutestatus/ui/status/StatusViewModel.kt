@@ -73,13 +73,15 @@ class StatusViewModel : ViewModel() {
                     if (response.isSuccessful) {
                         //If successful update values
                         commuteStatus.value = response.body()
-//                        val other = mutableListOf<Status>()
-//                        commuteStatus.value!!.toWork = other
                         if (!commuteStatus.value!!.toHome.isEmpty()) {
                             toHome.postValue(commuteStatus.value?.toHome?.elementAt(homeIndex))
+                        } else {
+                            toHome.postValue(null)
                         }
                         if (!commuteStatus.value!!.toWork.isEmpty()) {
                             toHome.postValue(commuteStatus.value?.toWork?.elementAt(workIndex))
+                        } else {
+                            toWork.postValue(null)
                         }
                         commuteStatusStatus.postValue("")
                     } else {
