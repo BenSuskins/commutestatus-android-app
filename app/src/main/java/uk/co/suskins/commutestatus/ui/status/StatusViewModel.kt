@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import uk.co.suskins.commutestatus.data.CommuteStatus
 import uk.co.suskins.commutestatus.data.Status
+import uk.co.suskins.commutestatus.data.User
 import uk.co.suskins.commutestatus.service.CommuteStatusService
 
 
@@ -17,7 +18,10 @@ class StatusViewModel : ViewModel() {
     private val TAG = "StatusViewModel"
     var workIndex = 0
     var homeIndex = 0
-    val status: MutableLiveData<String> by lazy {
+    val commuteStatusStatus: MutableLiveData<String> by lazy {
+        MutableLiveData<String>(LOADING)
+    }
+    val userStatus: MutableLiveData<String> by lazy {
         MutableLiveData<String>(LOADING)
     }
     internal val commuteStatus: MutableLiveData<CommuteStatus> by lazy {
@@ -29,10 +33,13 @@ class StatusViewModel : ViewModel() {
     internal val toHome: MutableLiveData<Status> by lazy {
         MutableLiveData<Status>()
     }
+    internal val user: MutableLiveData<User> by lazy {
+        MutableLiveData<User>()
+    }
 
-    fun getCommuteStatus(accessToken: String?) {
+    fun getData(accessToken: String?) {
         //Initialise values
-        status.value = LOADING
+        commuteStatusStatus.value = LOADING
         workIndex = 0
         homeIndex = 0
 
@@ -43,10 +50,18 @@ class StatusViewModel : ViewModel() {
 
         //Call API with Access Token
         val service: CommuteStatusService = retrofit.create(CommuteStatusService::class.java)
+        getCommuteStatus(service, accessToken)
+        getUser(service, accessToken)
+    }
+
+    private fun getCommuteStatus(
+        service: CommuteStatusService,
+        accessToken: String?
+    ) {
         service.getCommuteStatus("Bearer $accessToken").enqueue(
             (object : Callback<CommuteStatus> {
                 override fun onFailure(call: Call<CommuteStatus>, t: Throwable) {
-                    status.value = ERRORED
+                    commuteStatusStatus.value = ERRORED
                     Log.e(TAG, "Error getting Commute Status")
                     Log.getStackTraceString(t)
                 }
@@ -58,13 +73,51 @@ class StatusViewModel : ViewModel() {
                     if (response.isSuccessful) {
                         //If successful update values
                         commuteStatus.value = response.body()
-                        toWork.postValue(commuteStatus.value?.toWork?.elementAt(workIndex)!!)
-                        toHome.postValue(commuteStatus.value?.toHome?.elementAt(homeIndex)!!)
-                        status.postValue("")
+//                        val other = mutableListOf<Status>()
+//                        commuteStatus.value!!.toWork = other
+                        if (!commuteStatus.value!!.toHome.isEmpty()) {
+                            toHome.postValue(commuteStatus.value?.toHome?.elementAt(homeIndex))
+                        }
+                        if (!commuteStatus.value!!.toWork.isEmpty()) {
+                            toHome.postValue(commuteStatus.value?.toWork?.elementAt(workIndex))
+                        }
+                        commuteStatusStatus.postValue("")
                     } else {
                         //If errored set state and log
-                        status.value = ERRORED
+                        commuteStatusStatus.value = ERRORED
                         Log.e(TAG, "Error getting Commute Status")
+                        Log.e(TAG, "Code: ${response.code()}")
+                        Log.e(TAG, "Message: ${response.message()}")
+                    }
+                }
+            })
+        )
+    }
+
+    private fun getUser(
+        service: CommuteStatusService,
+        accessToken: String?
+    ) {
+        service.getUser("Bearer $accessToken").enqueue(
+            (object : Callback<User> {
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    userStatus.value = ERRORED
+                    Log.e(TAG, "Error getting User")
+                    Log.getStackTraceString(t)
+                }
+
+                override fun onResponse(
+                    call: Call<User>,
+                    response: Response<User>
+                ) {
+                    if (response.isSuccessful) {
+                        //If successful update values
+                        user.postValue(response.body())
+                        userStatus.postValue("")
+                    } else {
+                        //If errored set state and log
+                        userStatus.value = ERRORED
+                        Log.e(TAG, "Error getting User")
                         Log.e(TAG, "Code: ${response.code()}")
                         Log.e(TAG, "Message: ${response.message()}")
                     }
@@ -98,16 +151,20 @@ class StatusViewModel : ViewModel() {
     }
 
     fun incrementIndex() {
-        homeIndex++
-        if (homeIndex >= getNumberOfHomeStatuses()!!) {
-            homeIndex = 0
+        if (!commuteStatus.value!!.toHome.isEmpty()) {
+            homeIndex++
+            if (homeIndex >= getNumberOfHomeStatuses()!!) {
+                homeIndex = 0
+            }
+            toHome.postValue(commuteStatus.value?.toHome?.elementAt(homeIndex))
         }
-        toHome.postValue(commuteStatus.value?.toHome?.elementAt(homeIndex))
 
-        workIndex++
-        if (workIndex >= getNumberOfWorkStatuses()!!) {
-            workIndex = 0
+        if (!commuteStatus.value!!.toWork.isEmpty()) {
+            workIndex++
+            if (workIndex >= getNumberOfWorkStatuses()!!) {
+                workIndex = 0
+            }
+            toWork.postValue(commuteStatus.value?.toWork?.elementAt(workIndex))
         }
-        toWork.postValue(commuteStatus.value?.toWork?.elementAt(workIndex))
     }
 }

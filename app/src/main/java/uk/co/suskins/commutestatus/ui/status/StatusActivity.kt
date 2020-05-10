@@ -2,7 +2,6 @@ package uk.co.suskins.commutestatus.ui.status
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -41,7 +40,7 @@ class StatusActivity : AppCompatActivity() {
     fun refresh() {
         //Refresh Commute Status from API
         idToken = intent.getStringExtra(EXTRA_ID_TOKEN)
-        viewModel.getCommuteStatus(idToken)
+        viewModel.getData(idToken)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -88,7 +87,7 @@ class StatusActivity : AppCompatActivity() {
         //Create an observer for is loading
         val statusObserver = Observer<String> { status ->
             if (status.equals(LOADING)) {
-                //Show spinny wheel
+                //Show loading bar
                 loadingBar.isVisible = true
                 toHomePlatform.isVisible = false
                 toHomeSTD.isVisible = false
@@ -108,7 +107,7 @@ class StatusActivity : AppCompatActivity() {
                 toWorkStatus.isVisible = false
                 errorMessage.isVisible = true
             } else {
-                //Dont show  spinny wheel
+                //Dont show loading bar
                 loadingBar.isVisible = false
                 toHomePlatform.isVisible = true
                 toHomeSTD.isVisible = true
@@ -120,7 +119,7 @@ class StatusActivity : AppCompatActivity() {
             }
 
         }
-        viewModel.status.observe(this, statusObserver)
+        viewModel.commuteStatusStatus.observe(this, statusObserver)
 
         //Create an observer for the commute status
         val toHomeObserver = Observer<Status> { toHome ->
@@ -130,7 +129,7 @@ class StatusActivity : AppCompatActivity() {
                     R.string.std,
                     toHome.scheduledTimeOfDeparture,
                     toHome.to
-                ) //todo handle no trains
+                )
                 toHomeStatus.text =
                     getString(R.string.status, toHome.estimatedTimeOfDeparture)
                 toHomePlatform.text = getString(
@@ -152,7 +151,7 @@ class StatusActivity : AppCompatActivity() {
                     R.string.std,
                     toWork.scheduledTimeOfDeparture,
                     toWork.to
-                ) //todo handle no trains
+                )
                 toWorkStatus.text =
                     getString(R.string.status, toWork.estimatedTimeOfDeparture)
                 toWorkPlatform.text = getString(
