@@ -14,16 +14,16 @@
 <br />
 <p align="center">
   <a>
-    <img src="https://avatars1.githubusercontent.com/u/5471266?s=460&u=ffdc6bb815f378181362597f63a5af932df168ea&v=4" alt="Logo" width="80" height="80">
+    <img src="https://clipartix.com/wp-content/uploads/2016/04/Train-clipart-for-kids-free-free-clipart-images.gif" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Commute Status Android App</h3>
 
   <p align="center">
-    todo Description
+      Commute Status a simple Web and Android app to quickly see the status of your commute.
     <br />
     <br />
-    <a href="https://commutestatus.suskins.co.uk">View Demo</a>
+    <a href="https://commutestatus.suskins.co.uk">Check it out!</a>
     ·
     <a href="https://github.com/BenSuskins/commutestatus-android-app/issues">Report Bug</a>
     ·
@@ -41,36 +41,33 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
 
 
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Commute Status Screenshot](docs/commuteStatus.png)
 
-Here's a blank template to get started:
+Commute Status is a simple Web and Android app to quickly and easily see the status of your commute.
 
+Check out the [Web App](https://github.com/BenSuskins/commutestatus-web-app).
 
 ### Built With
 
 * Kotlin
+* MVVM Architecture
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-<!-- ROADMAP -->
-## Roadmap
+Create an Auth0 account and configure the [strings.xml](\app\src\main\res\values\strings.xml) for Auth0.
 
-See the [open issues](https://github.com/BenSuskins/commutestatus-android-app/issues) for a list of proposed features (and known issues).
-
-
+To run the backend check out: [Commute Status API](https://github.com/BenSuskins/commutestatus-api).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -98,15 +95,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Ben Suskins - [@BenSuskins](https://twitter.com/BenSuskins) - suskinsdevelopment@gmail.com
 
 Project Link: [https://github.com/BenSuskins/commutestatus-android-app](https://github.com/BenSuskins/commutestatus-android-app)
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-
-* []()
-* []()
-* []()
 
 
 <!-- MARKDOWN LINKS & IMAGES -->

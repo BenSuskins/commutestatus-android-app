@@ -16,8 +16,8 @@
     <string name="email">Email Address:</string>
     <string name="homeStation">Home Station:</string>
     <string name="workStation">Work Station:</string>
-    <string name="com_auth0_client_id">UpYBsnBj5CFGQvLvZngebP5AG5RknNT1</string>
-    <string name="com_auth0_domain">suskins-dev.eu.auth0.com</string>
+    <string name="com_auth0_client_id">todo</string>
+    <string name="com_auth0_domain">todo</string>
     <string name="email_address">Email Address:</string>
     <string name="errorMessage">We encountered an error, please try again.</string>
     <string name="unkownPlatform">Unknown</string>

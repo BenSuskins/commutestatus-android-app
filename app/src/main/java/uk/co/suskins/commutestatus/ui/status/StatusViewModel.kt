@@ -44,7 +44,7 @@ class StatusViewModel : ViewModel() {
         homeIndex = 0
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://commutestatusapi.suskins.co.uk/api/v1/")
+            .baseUrl("https://localhost:8080/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
