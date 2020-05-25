@@ -50,7 +50,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Commute Status Screenshot](docs/commuteStatus.png)
+![Commute Status Screenshot](docs/commuteStatus.jpg)
 
 Commute Status is a simple Web and Android app to quickly and easily see the status of your commute.
 
