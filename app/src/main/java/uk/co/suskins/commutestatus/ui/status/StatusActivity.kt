@@ -20,6 +20,7 @@ import uk.co.suskins.commutestatus.ui.welcome.EXTRA_ID_TOKEN
 const val ON_TIME = "On time"
 const val LOADING = "loading"
 const val ERRORED = "errored"
+const val SUCCESS = "success"
 
 class StatusActivity : AppCompatActivity() {
     var idToken: String? = ""

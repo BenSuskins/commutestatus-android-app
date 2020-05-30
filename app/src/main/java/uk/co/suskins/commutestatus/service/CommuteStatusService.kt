@@ -24,5 +24,5 @@ interface CommuteStatusService {
     ): Call<User>
 
     @POST("public/user")
-    fun postUser(@Body userRequest: UserRequest): Call<User>
+    fun postUser(@Body userRequest: UserRequest): Call<Void>
 }

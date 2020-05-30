@@ -14,6 +14,7 @@ import uk.co.suskins.commutestatus.data.UserRequest
 import uk.co.suskins.commutestatus.service.CommuteStatusService
 import uk.co.suskins.commutestatus.ui.status.ERRORED
 import uk.co.suskins.commutestatus.ui.status.LOADING
+import uk.co.suskins.commutestatus.ui.status.SUCCESS
 
 class SignupViewModel : ViewModel() {
     private val TAG = "SettingsViewModel"
@@ -68,32 +69,33 @@ class SignupViewModel : ViewModel() {
     }
 
     fun postUser(userRequest: UserRequest) {
+        userStatus.value = LOADING
+
         val retrofit = Retrofit.Builder()
             .baseUrl("https://localhost:8080/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service: CommuteStatusService = retrofit.create(CommuteStatusService::class.java)
         service.postUser(userRequest).enqueue(
-            (object : Callback<User> {
-                override fun onFailure(call: Call<User>, t: Throwable) {
+            (object : Callback<Void> {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
                     stationStatus.value = ERRORED
-                    Log.e(TAG, "Error putting User")
+                    Log.e(TAG, "Error posting User")
                     Log.getStackTraceString(t)
                 }
 
                 override fun onResponse(
-                    call: Call<User>,
-                    response: Response<User>
+                    call: Call<Void>,
+                    response: Response<Void>
                 ) {
-                    if (response.isSuccessful) {
-                        //If successful update values
-                        user.postValue(response.body())
-                    } else {
+                    if (!response.isSuccessful) {
                         //If errored set state and log
                         userStatus.value = ERRORED
-                        Log.e(TAG, "Error putting User")
+                        Log.e(TAG, "Error posting User")
                         Log.e(TAG, "Code: ${response.code()}")
                         Log.e(TAG, "Message: ${response.message()}")
+                    }else{
+                        userStatus.value = SUCCESS
                     }
                 }
             })

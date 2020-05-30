@@ -20,6 +20,7 @@ import uk.co.suskins.commutestatus.R
 import uk.co.suskins.commutestatus.data.UserRequest
 import uk.co.suskins.commutestatus.ui.status.ERRORED
 import uk.co.suskins.commutestatus.ui.status.LOADING
+import uk.co.suskins.commutestatus.ui.status.SUCCESS
 
 class SignupActivity : AppCompatActivity() {
     private val viewModel: SignupViewModel by viewModels()
@@ -42,6 +43,8 @@ class SignupActivity : AppCompatActivity() {
             if (status.equals(ERRORED)) {
                 //Show error message
                 errorMessage.isVisible = true
+            } else if (status.equals(SUCCESS)) {
+                reset()
             }
 
         }
