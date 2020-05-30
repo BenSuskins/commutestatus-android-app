@@ -5,6 +5,9 @@
     <string name="std">%1$s to %2$s</string>
     <string name="none">No trains to %1$s</string>
     <string name="updatePreferences">Update Preferences</string>
+    <string name="create">Create Account</string>
+    <string name="tos">Terms of Service.</string>
+    <string name="tosMessage">By creating an account you agree to the </string>
     <string name="reset">Reset</string>
     <string name="logOut">Log out</string>
     <string name="logIn">Log in</string>
@@ -12,12 +15,14 @@
     <string name="refresh">Refresh</string>
     <string name="settings">Settings</string>
     <string name="settingsHeader">Here you can update your preferences.</string>
+    <string name="signupHeader">Here you can update your account.</string>
     <string name="trainImgDescription">Train</string>
     <string name="email">Email Address:</string>
+    <string name="password">Password:</string>
     <string name="homeStation">Home Station:</string>
     <string name="workStation">Work Station:</string>
-    <string name="com_auth0_client_id">todo</string>
-    <string name="com_auth0_domain">todo</string>
+    <string name="com_auth0_client_id">Cd3IH4wy4e4Xrc4nq1J9K3TvgGhBt2RD</string>
+    <string name="com_auth0_domain">suskins-dev.eu.auth0.com</string>
     <string name="email_address">Email Address:</string>
     <string name="errorMessage">We encountered an error, please try again.</string>
     <string name="unkownPlatform">Unknown</string>

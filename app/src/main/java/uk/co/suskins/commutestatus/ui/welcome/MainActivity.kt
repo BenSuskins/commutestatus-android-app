@@ -20,6 +20,7 @@ import com.auth0.android.provider.VoidCallback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import uk.co.suskins.commutestatus.R
+import uk.co.suskins.commutestatus.ui.signup.SignupActivity
 import uk.co.suskins.commutestatus.ui.status.StatusActivity
 
 const val EXTRA_ID_TOKEN: String = "com.auth0.ID_TOKEN"
@@ -56,8 +57,16 @@ class MainActivity : AppCompatActivity() {
     private fun initialiseUi() {
         val loginButton: Button = findViewById(R.id.loginBtn)
         loginButton.setOnClickListener { login() }
+        val signupButton: Button = findViewById(R.id.signUpBtn)
+        signupButton.setOnClickListener { signup() }
     }
 
+    private fun signup() {
+        val intent = Intent(applicationContext, SignupActivity::class.java)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
+    }
 
     private fun login() {
         WebAuthProvider.login(auth0)

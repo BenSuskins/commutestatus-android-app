@@ -16,6 +16,10 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.signup.SignupActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.status.StatusActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />

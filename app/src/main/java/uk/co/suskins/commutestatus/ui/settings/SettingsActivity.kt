@@ -39,7 +39,7 @@ class SettingsActivity : AppCompatActivity() {
         //Set button listeners
         findViewById<Button>(R.id.logoutBtn).setOnClickListener { logout() }
         findViewById<Button>(R.id.resetBtn).setOnClickListener { reset() }
-        findViewById<Button>(R.id.updateBtn).setOnClickListener { updatePreferences() }
+        findViewById<Button>(R.id.createBtn).setOnClickListener { updatePreferences() }
 
         //Set initial view
         loadingBar.isVisible = true
@@ -125,6 +125,7 @@ class SettingsActivity : AppCompatActivity() {
         //Create UserRequest
         val userRequest = UserRequest(
             emailInput.text.toString(),
+            null,
             getStationId(homeStationInput.text.toString()),
             getStationId(workStationInput.text.toString())
         )
