@@ -38,7 +38,7 @@ android {
 
 dependencies {
     def lifecycle_version = "2.2.0"
-    def dagger_version = "2.27"
+    def dagger_version = "2.42"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
